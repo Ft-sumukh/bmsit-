@@ -1,8 +1,24 @@
 import axios from 'axios';
 
+// Helper to dynamically resolve backend API base URL
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  // Fallback to deployed production backend on Vercel if running in production browser
+  if (
+    typeof window !== 'undefined' && 
+    window.location.hostname !== 'localhost' && 
+    window.location.hostname !== '127.0.0.1'
+  ) {
+    return 'https://bmsit-jatk.vercel.app/api';
+  }
+  return 'http://127.0.0.1:5000/api';
+};
+
 // Create configured Axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api',
+  baseURL: getBaseURL(),
   withCredentials: true, // Crucial to send refresh cookies
   headers: {
     'Content-Type': 'application/json'
@@ -38,9 +54,7 @@ api.interceptors.response.use(
       if (errMsg === 'Token expired' || errMsg.includes('expired')) {
         originalRequest._retry = true;
         try {
-          const refreshUrl = `${
-            import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api'
-          }/auth/refresh`;
+          const refreshUrl = `${getBaseURL()}/auth/refresh`;
 
           // Post with credentials to send HttpOnly refreshToken cookie
           const { data } = await axios.post(refreshUrl, {}, { withCredentials: true });
