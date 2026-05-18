@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getDocuments } from '../services/documentService';
 import { 
   askDocumentQuestion, 
@@ -79,8 +79,8 @@ const ChatPage = () => {
       try {
         const history = await getChatHistory(selectedDoc._id);
         setMessages(history.map(msg => ({
-          role: msg.role,
-          content: msg.message
+          role: msg.sender || msg.role,
+          content: msg.text || msg.message
         })));
       } catch (err) {
         console.warn('Failed to load chat history:', err.message);
@@ -114,7 +114,7 @@ const ChatPage = () => {
       const response = await askDocumentQuestion(selectedDoc._id, userMessage);
       
       // Append AI response
-      setMessages(prev => [...prev, { role: 'assistant', content: response.answer }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: response.text || response.answer }]);
     } catch (err) {
       setMessages(prev => [
         ...prev,
