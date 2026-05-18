@@ -76,16 +76,22 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`🚀 StudyMind server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
-
-// Graceful shutdown handling
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server...');
-  server.close(() => {
-    console.log('HTTP server closed.');
+// Only execute persistent port listening when running locally, not in Vercel Serverless mode
+let server;
+if (!process.env.VERCEL) {
+  server = app.listen(PORT, () => {
+    console.log(`🚀 StudyMind server running in local mode on port ${PORT}`);
   });
-});
+
+  // Graceful shutdown handling (only relevant for standalone local servers)
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server...');
+    if (server) {
+      server.close(() => {
+        console.log('HTTP server closed.');
+      });
+    }
+  });
+}
 
 module.exports = app;
