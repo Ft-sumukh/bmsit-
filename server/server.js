@@ -1,3 +1,8 @@
+// Polyfill browser objects for compatibility inside Node/Vercel serverless environments
+if (typeof global.DOMMatrix === 'undefined') {
+  global.DOMMatrix = class DOMMatrix {};
+}
+
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
