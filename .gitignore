@@ -1,0 +1,21 @@
+# StudyMind Master GitIgnore
+
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Local Environment Variables
+.env
+server/.env
+
+# Production Builds
+client/dist/
+dist/
+
+# System / Editor Caches
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
