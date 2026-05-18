@@ -46,6 +46,15 @@ if (process.env.NODE_ENV === 'development') {
 // Serve uploaded study PDF documents statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the StudyMind API! Backend is fully operational.',
+    documentation: 'https://github.com/Ft-sumukh/bmsit-',
+    timestamp: new Date()
+  });
+});
+
 // Health Check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
