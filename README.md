@@ -1,2 +1,2 @@
 # bmsit-
-clg help 
+clg help :https://bmsit-sigma.vercel.app/
