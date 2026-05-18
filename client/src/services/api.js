@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create configured Axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api',
   withCredentials: true, // Crucial to send refresh cookies
   headers: {
     'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ api.interceptors.response.use(
         originalRequest._retry = true;
         try {
           const refreshUrl = `${
-            import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
+            import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api'
           }/auth/refresh`;
 
           // Post with credentials to send HttpOnly refreshToken cookie
